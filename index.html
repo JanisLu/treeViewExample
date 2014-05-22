@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Tree test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery.jstree.js"></script>
+    <script type="text/javascript" src="js/jstree-methods.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="syntax/!style.css" />
+    <link type="text/css" rel="stylesheet" href="css/!style.css" />
+    <script type="text/javascript" src="syntax/!script.js"></script>
+
+    <link rel="stylesheet" href="styles/bootstrap.css">
+    <link rel="stylesheet" href="styles/font-titillium.css" type="text/css" />
+</head>
+
+<body>
+
+    <div>Use context menu to add/edit</div>
+    <div id="tree" class="demo"></div>
+    <input type="button" id="saveBtn" value="Save"/>
+    <input type="button" id="cancelChanges" value="Cancel changes"/>
+    <script type="text/javascript">
+
+        $(function () {
+
+            $.prepareStartupData();
+            $jsTreeObj = $('#tree');
+
+            $jsTreeObj.jstree({
+                "json_data": {
+                    "data": jQuery.getTreeDataFromStorage(),
+                },
+                "plugins": ["themes", "json_data", "ui", "crrm", "contextmenu"],               
+
+                "contextmenu": {
+                    "items": function ($node) {
+
+                        return {
+                            "create": {
+                                "label": "Create",
+                                "action": function (obj) {
+                                    this.create(obj);
+                                }
+                            },
+                            "rename": {
+                                "label": "Rename",
+                                "action": function (obj) {
+                                    this.rename(obj);
+                                }
+                            },
+                            "delete": {
+                                "label": "Delete",
+                                "action": function (obj) {
+                                    var r = confirm("Remove selected node!");
+                                    if (r == true) {
+                                        this.remove(obj);
+                                    }
+                                }
+                            }
+                        };
+                    }
+                },
+
+                // set a theme
+                "themes": {
+                    "theme": "proton",
+                }
+            });
+
+            $('#saveBtn').click(function () {
+                jQuery.saveTreeData('tree', {});
+            });
+
+            $('#cancelChanges').click(function () {
+                jQuery.reloadTreeData('tree');
+            });
+
+        });
+    </script>
+</body>
+</html>
